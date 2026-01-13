@@ -20,11 +20,11 @@ fun MainScreenTab(
     modifier: Modifier = Modifier,
     state: MainScreenState,
     selectedTabIndex: Int,
-    onClick: (MainScreenAction) -> Unit,
+    onClick: () -> Unit,
 ) {
     Tab(
         selected = state.selectedTabIndex == selectedTabIndex,
-        onClick = { onClick(MainScreenAction.OnIndexChanged(0) )},
+        onClick = onClick,
         modifier = modifier,
         selectedContentColor = SandYellow,
         unselectedContentColor = Color.Black.copy(alpha = 0.5f),
