@@ -11,7 +11,10 @@ class MainScreenViewModel: ViewModel() {
 
     fun onAction(action: MainScreenAction) {
         when (action) {
-            is MainScreenAction.OnIndexChanged -> {
+            is MainScreenAction.OnBattleRoundClick -> {
+                //_state.update { it.copy(selectedTabIndex = action.index)}
+            }
+            is MainScreenAction.OnTabSelected -> {
                 _state.update { it.copy(selectedTabIndex = action.index)}
             }
         }
