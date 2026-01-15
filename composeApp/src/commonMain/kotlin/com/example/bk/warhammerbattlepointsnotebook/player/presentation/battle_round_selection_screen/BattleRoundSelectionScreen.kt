@@ -35,7 +35,8 @@ fun BattleRoundSelectionScreen(
 ) {
     BattleRoundSelectionList(
         battleRounds = state.battleRounds,
-        onButtonClick = { BattleRoundSelectionScreenAction.OnBattleRoundSelected(it)
+        onButtonClick = {
+            onAction(BattleRoundSelectionScreenAction.OnBattleRoundSelected(it))
         }
     )
 }

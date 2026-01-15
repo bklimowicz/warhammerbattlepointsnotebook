@@ -29,6 +29,7 @@ import com.example.bk.warhammerbattlepointsnotebook.core.presentation.DesertWhit
 import com.example.bk.warhammerbattlepointsnotebook.core.presentation.SandYellow
 import com.example.bk.warhammerbattlepointsnotebook.main_screen.presentation.components.AppIcon
 import com.example.bk.warhammerbattlepointsnotebook.main_screen.presentation.components.MainScreenTab
+import com.example.bk.warhammerbattlepointsnotebook.player.domain.BattleRound
 import com.example.bk.warhammerbattlepointsnotebook.player.presentation.battle_round_selection_screen.BattleRoundSelectionScreenRoot
 import com.example.bk.warhammerbattlepointsnotebook.player.presentation.battle_round_selection_screen.BattleRoundSelectionScreenViewModel
 import org.koin.compose.viewmodel.koinViewModel
@@ -40,14 +41,14 @@ import warhammerbattlepointsnotebook.composeapp.generated.resources.player2
 @Composable
 fun MainScreenRoot(
     viewModel: MainScreenViewModel = koinViewModel(),
-    onBattleRoundClick: (Int) -> Unit,
+    onBattleRoundClick: (BattleRound) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     MainScreen(
         state = state,
         onAction = { action ->
             when (action) {
-                is MainScreenAction.OnBattleRoundClick -> onBattleRoundClick(action.index)
+                is MainScreenAction.OnBattleRoundClick -> onBattleRoundClick(action.battleRound)
                 else -> Unit
             }
             viewModel.onAction(action)
@@ -142,14 +143,18 @@ fun MainScreen(
                             0 -> {
                                 BattleRoundSelectionScreenRoot(
                                     BattleRoundSelectionScreenViewModel(),
-                                    onBattleRoundClick = {}
+                                    onBattleRoundClick = {
+                                        onAction(MainScreenAction.OnBattleRoundClick(it))
+                                    }
                                 )
                             }
 
                             1 -> {
                                 BattleRoundSelectionScreenRoot(
                                     BattleRoundSelectionScreenViewModel(),
-                                    onBattleRoundClick = {}
+                                    onBattleRoundClick = {
+                                        onAction(MainScreenAction.OnBattleRoundClick(it))
+                                    }
                                 )
                             }
                         }
