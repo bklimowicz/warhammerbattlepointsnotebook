@@ -9,8 +9,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bk.warhammerbattlepointsnotebook.core.presentation.SandYellow
-import com.example.bk.warhammerbattlepointsnotebook.main_screen.presentation.MainScreenAction
-import com.example.bk.warhammerbattlepointsnotebook.main_screen.presentation.MainScreenState
+import com.example.bk.warhammerbattlepointsnotebook.main_screen.presentation.GameState
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -18,7 +17,7 @@ import org.jetbrains.compose.resources.stringResource
 fun MainScreenTab(
     text: StringResource,
     modifier: Modifier = Modifier,
-    state: MainScreenState,
+    state: GameState,
     selectedTabIndex: Int,
     onClick: () -> Unit,
 ) {

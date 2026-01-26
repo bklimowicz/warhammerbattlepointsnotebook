@@ -24,6 +24,8 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun BattleRoundScreen(
+    battleRoundId: Int,
+    playerId: Int,
     modifier: Modifier = Modifier,
 ) {
     Surface(
@@ -49,6 +51,7 @@ fun BattleRoundScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Text("Battle Round $battleRoundId, player $playerId")
             Text(
                 "Primary points:",
                 fontSize = 30.sp

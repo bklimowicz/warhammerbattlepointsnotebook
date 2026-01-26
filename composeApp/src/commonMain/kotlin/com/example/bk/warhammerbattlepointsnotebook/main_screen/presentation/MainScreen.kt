@@ -24,41 +24,80 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
+import androidx.savedstate.serialization.SavedStateConfiguration
+import com.example.bk.warhammerbattlepointsnotebook.app.Route
 import com.example.bk.warhammerbattlepointsnotebook.core.presentation.DarkBlue
 import com.example.bk.warhammerbattlepointsnotebook.core.presentation.DesertWhite
 import com.example.bk.warhammerbattlepointsnotebook.core.presentation.SandYellow
 import com.example.bk.warhammerbattlepointsnotebook.main_screen.presentation.components.AppIcon
 import com.example.bk.warhammerbattlepointsnotebook.main_screen.presentation.components.MainScreenTab
-import com.example.bk.warhammerbattlepointsnotebook.player.domain.BattleRound
-import com.example.bk.warhammerbattlepointsnotebook.player.presentation.battle_round_selection_screen.BattleRoundSelectionScreenRoot
-import com.example.bk.warhammerbattlepointsnotebook.player.presentation.battle_round_selection_screen.BattleRoundSelectionScreenViewModel
+import com.example.bk.warhammerbattlepointsnotebook.player.presentation.battle_round_screen.BattleRoundScreen
+import com.example.bk.warhammerbattlepointsnotebook.player.presentation.battle_round_selection_screen.BattleRoundSelectionScreen
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
 import org.koin.compose.viewmodel.koinViewModel
 import warhammerbattlepointsnotebook.composeapp.generated.resources.Res
 import warhammerbattlepointsnotebook.composeapp.generated.resources.player1
 import warhammerbattlepointsnotebook.composeapp.generated.resources.player2
 
 
+private val config = SavedStateConfiguration {
+    serializersModule = SerializersModule {
+        polymorphic(NavKey::class) {
+            subclass(Route.MainScreen::class, Route.MainScreen.serializer())
+            subclass(Route.BattleRoundScreen::class, Route.BattleRoundScreen.serializer())
+        }
+    }
+}
+
 @Composable
 fun MainScreenRoot(
-    viewModel: MainScreenViewModel = koinViewModel(),
-    onBattleRoundClick: (BattleRound) -> Unit,
+    viewModel: MainViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    MainScreen(
-        state = state,
-        onAction = { action ->
-            when (action) {
-                is MainScreenAction.OnBattleRoundClick -> onBattleRoundClick(action.battleRound)
-                else -> Unit
+    val backStack = rememberNavBackStack(config, Route.MainScreen)
+
+    NavDisplay(
+        backStack = backStack,
+        onBack = { backStack.removeLastOrNull() },
+        entryProvider = entryProvider {
+            entry<Route.MainScreen> {
+                MainScreen(
+                    state = state,
+                    onAction = { action ->
+                        when (action) {
+                            is MainScreenAction.OnBattleRoundClick -> {
+                                backStack.add(
+                                    Route.BattleRoundScreen(action.battleRoundId, action.playerId)
+                                )
+                            }
+
+                            is MainScreenAction.OnTabSelected -> {
+                                viewModel.onAction(action)
+                            }
+
+                            is MainScreenAction.GoBack -> {
+                                backStack.removeLastOrNull()
+                            }
+                        }
+
+                    }
+                )
             }
-            viewModel.onAction(action)
+            entry<Route.BattleRoundScreen> {
+                BattleRoundScreen(it.battleRoundId, it.playerId)
+            }
         }
     )
 }
 
 @Composable
 fun MainScreen(
-    state: MainScreenState,
+    state: GameState,
     onAction: (MainScreenAction) -> Unit,
 ) {
     val pagerState = rememberPagerState {
@@ -141,20 +180,18 @@ fun MainScreen(
                     ) {
                         when (pageIndex) {
                             0 -> {
-                                BattleRoundSelectionScreenRoot(
-                                    BattleRoundSelectionScreenViewModel(),
-                                    onBattleRoundClick = {
-                                        onAction(MainScreenAction.OnBattleRoundClick(it))
-                                    }
+                                BattleRoundSelectionScreen(
+                                    battleRounds = state.battleRounds,
+                                    activePlayerId = state.activePlayerId,
+                                    onAction = onAction
                                 )
                             }
 
                             1 -> {
-                                BattleRoundSelectionScreenRoot(
-                                    BattleRoundSelectionScreenViewModel(),
-                                    onBattleRoundClick = {
-                                        onAction(MainScreenAction.OnBattleRoundClick(it))
-                                    }
+                                BattleRoundSelectionScreen(
+                                    battleRounds = state.battleRounds,
+                                    activePlayerId = state.activePlayerId,
+                                    onAction = onAction
                                 )
                             }
                         }

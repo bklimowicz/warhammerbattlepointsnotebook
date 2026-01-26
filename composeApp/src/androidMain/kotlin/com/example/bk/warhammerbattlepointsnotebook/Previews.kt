@@ -13,45 +13,45 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.bk.warhammerbattlepointsnotebook.core.presentation.DarkBlue
 import com.example.bk.warhammerbattlepointsnotebook.main_screen.presentation.MainScreen
 import com.example.bk.warhammerbattlepointsnotebook.main_screen.presentation.MainScreenAction
-import com.example.bk.warhammerbattlepointsnotebook.main_screen.presentation.MainScreenViewModel
+import com.example.bk.warhammerbattlepointsnotebook.main_screen.presentation.MainViewModel
 import com.example.bk.warhammerbattlepointsnotebook.player.domain.BattleRound
 import com.example.bk.warhammerbattlepointsnotebook.player.presentation.battle_round_screen.BattleRoundScreen
 
 private val battleRounds = (1..5).map {
-    BattleRound(roundNumber = it)
+    BattleRound(id = it, roundNumber = it)
 }
 
-@Preview
-@Composable
-private fun MainScreenPreview() {
-    val viewModel = MainScreenViewModel()
-    val onTabClick: (BattleRound) -> Unit = {}
-    val state by viewModel.state.collectAsStateWithLifecycle()
-    MainScreen(
-        state = state,
-        onAction = { action ->
-            when (action) {
-                is MainScreenAction.OnBattleRoundClick -> onTabClick(action.battleRound)
-                else -> Unit
-            }
-            viewModel.onAction(action)
-        }
-    )
-}
+//@Preview
+//@Composable
+//private fun MainScreenPreview() {
+//    val viewModel = MainViewModel()
+//    val onTabClick: (BattleRound) -> Unit = {}
+//    val state by viewModel.state.collectAsStateWithLifecycle()
+//    MainScreen(
+//        state = state,
+//        onAction = { action ->
+//            when (action) {
+//                is MainScreenAction.OnBattleRoundClick -> onTabClick(action.battleRoundId)
+//                else -> Unit
+//            }
+//            viewModel.onAction(action)
+//        }
+//    )
+//}
 
-@Preview(showBackground = true, backgroundColor = 0xFF0B405E)
-@Composable
-private fun BattleRoundScreenPreview() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(DarkBlue)
-            .statusBarsPadding(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        BattleRoundScreen()
-    }
-}
+//@Preview(showBackground = true, backgroundColor = 0xFF0B405E)
+//@Composable
+//private fun BattleRoundScreenPreview() {
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .background(DarkBlue)
+//            .statusBarsPadding(),
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        BattleRoundScreen()
+//    }
+//}
 
 
 

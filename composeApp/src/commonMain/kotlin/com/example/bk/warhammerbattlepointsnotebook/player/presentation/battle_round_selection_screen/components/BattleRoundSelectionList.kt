@@ -11,11 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.bk.warhammerbattlepointsnotebook.player.domain.BattleRound
-import com.example.bk.warhammerbattlepointsnotebook.player.presentation.battle_round_selection_screen.BattleRoundSelectionScreenAction
 
 @Composable
 fun BattleRoundSelectionList(
     battleRounds: List<BattleRound>,
+    playerId: Int,
     onButtonClick: (BattleRound) -> Unit,
     modifier: Modifier = Modifier,
 ) {
